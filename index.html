@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html>
+	<head> 
+		<title> BB8 - Computação Gráfica </title>
+		<meta charset="UTF-8"/>
+		<link rel="stylesheet" href="css/bootstrap.min.css">
+		<script src="three.min.js"></script>
+	</head>
+
+	<body onload="main();" style="background-color: #f2ede7" > <!--a função inicia ao abrir o navegador -->
+
+		<div class="container-fluid" align="center">
+			<div align="left"><button onClick='parent.location="javascript:location.reload()"' class="btn btn-outline-secondary btn-lg" style="margin: 5px;">Desfazer</button></div>
+			
+			<img src="bb-8.png">
+		</div>
+
+		<div id="canvas" class="container-fluid" style="float: auto; background-color: #E76924">
+			<div id="menu" class="row" style="float: auto; background-color: #f2ede7">
+			<div class="col" >
+				<div align="center"><img src="escala.png"></div>
+				<button onclick="escalarMais()" class="btn btn-secondary btn-lg" style="margin-bottom: 5px; margin-left: 90px;">Aumentar Escala</button><br>
+				<button onclick="escalarMenos()" class="btn btn-secondary btn-lg" style="margin: 5px; margin-left: 90px">Diminuir Escala</button> 
+				
+
+				
+
+			</div>
+			<div class="col" >
+				<div align="center"><img src="reflexao.png"></div>
+				<button onclick="reflexaoEmy()" class="btn btn-secondary btn-lg" style="margin: 5px; margin-left: 100px">Reflexão em y</button><br>
+				<button onclick="reflexaoEmxEy()" class="btn btn-secondary btn-lg" style="margin: 5px; margin-left: 100px">Reflexão em x e y</button><br>
+			</div>
+			<div class="col" >
+				<div align="center"><img src="rotacao.png"></div>
+				<button onclick="rotacao()" class="btn btn-secondary btn-lg" style="margin: 5px; margin-left: 130px">Rotação</button><br>
+			</div>
+			<div class="col">
+				<div align="center"><img src="translacao.png"></div>
+				<button onclick="translacaoRight()" class="btn btn-secondary btn-lg" style="margin: 5px; margin-left: 50px">Translação de 0.5 a direita</button><br>
+				<button onclick="translacaoLeft()" class="btn btn-secondary btn-lg" style="margin: 5px; margin-left: 50px">Translação de 0.5 a esquerda</button><br>
+				<button onclick="translacaoUp()" class="btn btn-secondary btn-lg" style="margin: 5px; margin-left: 50px">Translação de 0.5 pra cima</button><br>
+				<button onclick="translacaoDown()" class="btn btn-secondary btn-lg" style="margin: 5px; margin-left: 50px">Translação de 0.5 pra baixo</button><br>
+			</div>
+			
+			</div>
+		</div>
+
+		
+
+		
+
+	</body>
+
+	<script>
+
+			var cena, camera, renderer;
+			var corpo;
+			var cabeca;
+			var cabeça2;
+			var detalhe;
+			var olho1;
+			var olho2;
+			var olhoWhite1;
+			var olho1Fundo;
+			var olhoWhite2;
+			var olho2Fundo;
+			var olhoRed;
+			var circuloBarriga;
+			var circuloBarrigaDentro;
+			var detalheBarriga1;
+			var detalheBarriga2;
+			var detalheBarriga3;
+			var detalheBarriga4;
+			var detalheRosto1;
+			var detalheRosto2;
+			var detalheRosto3;
+			var detalheRosto4;
+			var detalheRosto5;
+			var antena1;
+			var antena2;
+			var antenaDetalhe1;
+			var antenaDetalhe2;
+			var circuloBarriga2;
+			var circuloBarriga3;
+			var circuloBarriga4;
+			var circuloBarrigaDentro2;
+			var barriga2Detalhe;
+			var fundao;
+			var teste;
+			var group;
+
+			function criarGroup(){
+				group = new THREE.Object3D();
+				group.add(corpo);
+				group.add(cabeca);
+				group.add(cabeca2);
+				group.add(detalhe);
+				group.add(olho1);
+				group.add(olho1Fundo);
+				group.add(olho2);
+				group.add(olho2Fundo);
+				group.add(olhoWhite1);
+				group.add(olhoWhite2);
+				group.add(olhoRed);
+				group.add(circuloBarriga);
+				group.add(circuloBarrigaDentro);
+				group.add(detalheBarriga1);
+				group.add(detalheBarriga2);
+				group.add(detalheBarriga3);
+				group.add(detalheBarriga4);
+				group.add(detalheRosto1);
+				group.add(detalheRosto2);
+				group.add(detalheRosto3);
+				group.add(detalheRosto4);
+				group.add(detalheRosto5);
+				group.add(antena1);
+				group.add(antena2);
+				group.add(antenaDetalhe1);
+				group.add(antenaDetalhe2);
+				group.add(fundao);
+				group.add(circuloBarriga2);
+				group.add(circuloBarriga3);
+				group.add(circuloBarriga4);	
+				group.add(circuloBarrigaDentro2);
+				group.add(teste);
+				group.add(barriga2Detalhe);
+				cena.add(group);
+			}
+
+			function criarBB8(){
+
+
+				//cabeca 1
+				var cabecaCor = new THREE.MeshBasicMaterial({
+					color:0xDCDCDC,
+					//wireframe: true,
+					side:THREE.DoubleSide
+				});
+
+				var cabecaPonto = new THREE.SphereGeometry(1.9,100,100); //(largura, altura e profundidade)
+				cabeca = new THREE.Mesh(cabecaPonto, cabecaCor); //faz a junção
+				cabeca.position.set(1.1, -0.1, -8.0);
+
+				//cabeca 2
+				var cabeca2Cor = new THREE.MeshBasicMaterial({
+					color:0xFFFFFF,
+					//wireframe: true,
+					side:THREE.DoubleSide
+				});
+
+				var cabeca2Ponto = new THREE.SphereGeometry(1.9,100,100);
+				cabeca2 = new THREE.Mesh(cabeca2Ponto, cabeca2Cor);
+				cabeca2.position.set(1.1, 0.001, -8.0);
+
+				//corpo
+				var corpoCor = new THREE.MeshBasicMaterial({
+					color:0xFFFFFF,
+					//wireframe: true,
+					side:THREE.DoubleSide
+				});
+
+				var corpoPonto = new THREE.SphereGeometry(2.2,100,100);
+				corpo = new THREE.Mesh(corpoPonto, corpoCor);
+				corpo.position.set(0.99, -2.3, -7.0);
+
+				//olho1
+				var olhoCor = new THREE.MeshBasicMaterial({
+					color:0x000000,
+					side:THREE.DoubleSide
+				});
+
+				var olhoPonto1 = new THREE.CircleGeometry(0.20, 50); //raio, segmentos, thetaStart, thetaLength)
+				olho1 = new THREE.Mesh(olhoPonto1, olhoCor);
+				olho1.position.set(0.63, 0.56, -4.0);
+
+				//olho2
+				var olhoPonto2 = new THREE.CircleGeometry(0.14, 50);
+				olho2 = new THREE.Mesh(olhoPonto2, olhoCor);
+				olho2.position.set(1.12, 0.16, -4.0);
+
+				
+				var olhoCorFundo = new THREE.MeshBasicMaterial({
+					color:0x3E3E3E,
+					side:THREE.DoubleSide
+				});
+
+				//olho 1 fundo
+				var olhoPontoFundo1 = new THREE.CircleGeometry(0.29, 50); //raio, segmentos, thetaStart, thetaLength)
+				olho1Fundo = new THREE.Mesh(olhoPontoFundo1, olhoCorFundo);
+				olho1Fundo.position.set(0.79, 0.7, -5.0);
+
+				//olho 2 fundo
+				var olhoPontoFundo2 = new THREE.CircleGeometry(0.21, 50);
+				olho2Fundo = new THREE.Mesh(olhoPontoFundo2, olhoCorFundo);
+				olho2Fundo.position.set(1.4, 0.2, -5.0);
+
+
+				
+				var whiteCor = new THREE.MeshBasicMaterial({
+					color:0xFFFFFF,
+					side:THREE.DoubleSide
+				});
+				//olho white 1
+				var whiteOlho = new THREE.CircleGeometry(0.019, 50); 
+				olhoWhite1 = new THREE.Mesh(whiteOlho, whiteCor);
+				olhoWhite1.position.set(0.53, 0.49, -3.0);
+
+				//olho white 2
+				olhoWhite2 = new THREE.Mesh(whiteOlho, whiteCor);
+				olhoWhite2.position.set(0.88, 0.16, -3.0);
+
+				//olho Red
+				var redCor = new THREE.MeshBasicMaterial({
+					color:0xF81A1F,
+					side:THREE.DoubleSide
+				});
+
+				var redOlho = new THREE.CircleGeometry(0.027, 50); 
+				olhoRed = new THREE.Mesh(redOlho, redCor);
+				olhoRed.position.set(0.41, 0.39, -3.0);
+
+
+				
+				//detalhe
+				var detalheCor = new THREE.MeshBasicMaterial({
+					color:0xFFA500,
+					side:THREE.DoubleSide
+				});
+
+			
+				var detalhePonto = new THREE.Geometry();
+				detalhePonto.vertices.push(new THREE.Vector3(1.099, 0.05, -1.0));
+				detalhePonto.vertices.push(new THREE.Vector3( 1.099, -0.05, -1.0));
+				detalhePonto.vertices.push(new THREE.Vector3(-1.099, -0.05, -1.0));
+				detalhePonto.vertices.push(new THREE.Vector3( -1.099, 0.05, -1.0));
+				detalhePonto.faces.push(new THREE.Face4(0, 1, 2, 3));
+				detalhe = new THREE.Mesh(detalhePonto, detalheCor);
+				detalhe.position.set(0.89, 1.0, -5.0);
+
+				//barriga fundo
+				var barrigaFundoCor = new THREE.MeshBasicMaterial({
+					color:0xFFA500,
+					side:THREE.DoubleSide
+				});
+
+				var barrigaFundoPonto = new THREE.CircleGeometry(0.75, 25);
+				circuloBarriga = new THREE.Mesh(barrigaFundoPonto, barrigaFundoCor);
+				circuloBarriga.position.set(0.4, -1.0, -4.0);
+
+				//barriga dentro
+				var barrigaDentroCor = new THREE.MeshBasicMaterial({
+					color:0xFFFFFF,
+					side:THREE.DoubleSide
+				});
+
+				var barrigaDentroPonto = new THREE.CircleGeometry(0.57, 25);
+				circuloBarrigaDentro = new THREE.Mesh(barrigaDentroPonto, barrigaDentroCor);
+				circuloBarrigaDentro.position.set(0.39, -1.0, -4.0);
+
+				//detalhe barriga 1
+				var detalheBarrigaCor = new THREE.MeshBasicMaterial({
+					color:0xFFA500,
+					side:THREE.DoubleSide
+				});
+
+			
+				var detalheBarriga1Ponto = new THREE.Geometry();
+				detalheBarriga1Ponto.vertices.push(new THREE.Vector3(0.1, 0.05, -1.0));
+				detalheBarriga1Ponto.vertices.push(new THREE.Vector3( 0.1, -0.05, -1.0));
+				detalheBarriga1Ponto.vertices.push(new THREE.Vector3(-0.1, -0.05, -1.0));
+				detalheBarriga1Ponto.vertices.push(new THREE.Vector3( -0.1, 0.05, -1.0));
+				detalheBarriga1Ponto.faces.push(new THREE.Face4(0, 1, 2, 3));
+
+				detalheBarriga1 = new THREE.Mesh(detalheBarriga1Ponto, detalheBarrigaCor);
+				detalheBarriga1.position.set(-0.1, -0.75, -2.0);
+
+				//detalhe barriga 2
+				var detalheBarriga2Ponto = new THREE.Geometry();
+				detalheBarriga2Ponto.vertices.push(new THREE.Vector3(0.1, 0.05, -1.0));
+				detalheBarriga2Ponto.vertices.push(new THREE.Vector3( 0.1, -0.05, -1.0));
+				detalheBarriga2Ponto.vertices.push(new THREE.Vector3(-0.1, -0.05, -1.0));
+				detalheBarriga2Ponto.vertices.push(new THREE.Vector3( -0.1, 0.05, -1.0));
+				detalheBarriga2Ponto.faces.push(new THREE.Face4(0, 1, 2, 3));
+
+				detalheBarriga2 = new THREE.Mesh(detalheBarriga2Ponto, detalheBarrigaCor);
+				detalheBarriga2.position.set(0.68, -0.75, -2.0);	
+
+				//detalhe barriga 3
+				var detalheBarriga3Ponto = new THREE.Geometry();
+				detalheBarriga3Ponto.vertices.push(new THREE.Vector3(0.05, 0.1, -1.0));
+				detalheBarriga3Ponto.vertices.push(new THREE.Vector3( 0.05, -0.1, -1.0));
+				detalheBarriga3Ponto.vertices.push(new THREE.Vector3(-0.05, -0.1, -1.0));
+				detalheBarriga3Ponto.vertices.push(new THREE.Vector3( -0.05, 0.1, -1.0));
+				detalheBarriga3Ponto.faces.push(new THREE.Face4(0, 1, 2, 3));
+
+				detalheBarriga3 = new THREE.Mesh(detalheBarriga3Ponto, detalheBarrigaCor);
+				detalheBarriga3.position.set(0.32, -0.39, -2.0);
+
+				//detalhe barriga 4
+				var detalheBarriga4Ponto = new THREE.Geometry();
+				detalheBarriga4Ponto.vertices.push(new THREE.Vector3(0.05, 0.1, -1.0));
+				detalheBarriga4Ponto.vertices.push(new THREE.Vector3( 0.05, -0.1, -1.0));
+				detalheBarriga4Ponto.vertices.push(new THREE.Vector3(-0.05, -0.1, -1.0));
+				detalheBarriga4Ponto.vertices.push(new THREE.Vector3( -0.05, 0.1, -1.0));
+				detalheBarriga4Ponto.faces.push(new THREE.Face4(0, 1, 2, 3));
+
+				detalheBarriga4 = new THREE.Mesh(detalheBarriga4Ponto, detalheBarrigaCor);
+				detalheBarriga4.position.set(0.32, -1.1, -2.0);	
+
+
+
+				var detalheRostoCor = new THREE.MeshBasicMaterial({
+					color:0xFFA500,
+					side:THREE.DoubleSide
+				});
+
+				//detalhe rosto 1
+				var detalheRosto1Ponto = new THREE.Geometry();
+				detalheRosto1Ponto.vertices.push(new THREE.Vector3(0.06, 0.033, -1.0));
+				detalheRosto1Ponto.vertices.push(new THREE.Vector3( 0.06, -0.033, -1.0));
+				detalheRosto1Ponto.vertices.push(new THREE.Vector3(-0.06, -0.033, -1.0));
+				detalheRosto1Ponto.vertices.push(new THREE.Vector3( -0.06, 0.033, -1.0));
+				detalheRosto1Ponto.faces.push(new THREE.Face4(0, 1, 2, 3));
+
+				detalheRosto1 = new THREE.Mesh(detalheRosto1Ponto, detalheRostoCor);
+				detalheRosto1.position.set(-0.14, 0.039, -1.0);
+
+				//detalhe rosto 2
+				var detalheRosto2Ponto = new THREE.Geometry();
+				detalheRosto2Ponto.vertices.push(new THREE.Vector3(0.01, 0.033, -1.0));
+				detalheRosto2Ponto.vertices.push(new THREE.Vector3( 0.01, -0.033, -1.0));
+				detalheRosto2Ponto.vertices.push(new THREE.Vector3(-0.01, -0.033, -1.0));
+				detalheRosto2Ponto.vertices.push(new THREE.Vector3( -0.01, 0.033, -1.0));
+				detalheRosto2Ponto.faces.push(new THREE.Face4(0, 1, 2, 3));
+
+				detalheRosto2 = new THREE.Mesh(detalheRosto2Ponto, detalheRostoCor);
+				detalheRosto2.position.set(-0.05, 0.039, -1.0);	
+
+				//detalhe rosto 3
+				var detalheRosto3Ponto = new THREE.Geometry();
+				detalheRosto3Ponto.vertices.push(new THREE.Vector3(0.06, 0.033, -1.0));
+				detalheRosto3Ponto.vertices.push(new THREE.Vector3( 0.06, -0.033, -1.0));
+				detalheRosto3Ponto.vertices.push(new THREE.Vector3(-0.06, -0.033, -1.0));
+				detalheRosto3Ponto.vertices.push(new THREE.Vector3( -0.06, 0.033, -1.0));
+				detalheRosto3Ponto.faces.push(new THREE.Face4(0, 1, 2, 3));
+
+				detalheRosto3 = new THREE.Mesh(detalheRosto3Ponto, detalheRostoCor);
+				detalheRosto3.position.set(0.04, 0.039, -1.0);	
+
+				//detalhe rosto 4
+				var detalheRosto4Ponto = new THREE.Geometry();
+				detalheRosto4Ponto.vertices.push(new THREE.Vector3(0.01, 0.033, -1.0));
+				detalheRosto4Ponto.vertices.push(new THREE.Vector3( 0.01, -0.033, -1.0));
+				detalheRosto4Ponto.vertices.push(new THREE.Vector3(-0.01, -0.033, -1.0));
+				detalheRosto4Ponto.vertices.push(new THREE.Vector3( -0.01, 0.033, -1.0));
+				detalheRosto4Ponto.faces.push(new THREE.Face4(0, 1, 2, 3));
+
+				detalheRosto4 = new THREE.Mesh(detalheRosto4Ponto, detalheRostoCor);
+				detalheRosto4.position.set(0.18, 0.039, -1.0);
+
+				//detalhe rosto 5
+				var detalheRosto5Ponto = new THREE.Geometry();
+				detalheRosto5Ponto.vertices.push(new THREE.Vector3(0.06, 0.033, -1.0));
+				detalheRosto5Ponto.vertices.push(new THREE.Vector3( 0.06, -0.033, -1.0));
+				detalheRosto5Ponto.vertices.push(new THREE.Vector3(-0.06, -0.033, -1.0));
+				detalheRosto5Ponto.vertices.push(new THREE.Vector3( -0.06, 0.033, -1.0));
+				detalheRosto5Ponto.faces.push(new THREE.Face4(0, 1, 2, 3));
+
+				detalheRosto5 = new THREE.Mesh(detalheRosto5Ponto, detalheRostoCor);
+				detalheRosto5.position.set(0.728, 0.039, -1.0);
+
+				//antena 1
+				var antenaCor = new THREE.MeshBasicMaterial({
+					color:0xD3D3D3,
+					side:THREE.DoubleSide
+				});
+
+			
+				var antena1Ponto = new THREE.Geometry();
+				antena1Ponto.vertices.push(new THREE.Vector3(0.006, 0.14, -1.0));
+				antena1Ponto.vertices.push(new THREE.Vector3( 0.006, -0.14, -1.0));
+				antena1Ponto.vertices.push(new THREE.Vector3(-0.006, -0.14, -1.0));
+				antena1Ponto.vertices.push(new THREE.Vector3( -0.006, 0.14, -1.0));
+				antena1Ponto.faces.push(new THREE.Face4(0, 1, 2, 3));
+
+				antena1 = new THREE.Mesh(antena1Ponto, antenaCor);
+				antena1.position.set(0.27, 0.62, -1.0);
+
+				//antena 2
+				var antena2Ponto = new THREE.Geometry();
+				antena2Ponto.vertices.push(new THREE.Vector3(0.005, 0.21, -1.0));
+				antena2Ponto.vertices.push(new THREE.Vector3( 0.005, -0.21, -1.0));
+				antena2Ponto.vertices.push(new THREE.Vector3(-0.005, -0.21, -1.0));
+				antena2Ponto.vertices.push(new THREE.Vector3( -0.005, 0.21, -1.0));
+				antena2Ponto.faces.push(new THREE.Face4(0, 1, 2, 3));
+
+				antena2 = new THREE.Mesh(antena2Ponto, antenaCor);
+				antena2.position.set(0.35, 0.69, -1.0);
+
+				//antena detalhe 1
+				var antenaDetalheCor = new THREE.MeshBasicMaterial({
+					color:0x000000,
+					side:THREE.DoubleSide
+				});
+
+				var antenaDetalhe1Ponto = new THREE.Geometry();
+				antenaDetalhe1Ponto.vertices.push(new THREE.Vector3(0.007, 0.018, -1.0));
+				antenaDetalhe1Ponto.vertices.push(new THREE.Vector3( 0.007, -0.018, -1.0));
+				antenaDetalhe1Ponto.vertices.push(new THREE.Vector3(-0.007, -0.018, -1.0));
+				antenaDetalhe1Ponto.vertices.push(new THREE.Vector3( -0.007, 0.018, -1.0));
+				antenaDetalhe1Ponto.faces.push(new THREE.Face4(0, 1, 2, 3));
+
+				antenaDetalhe1 = new THREE.Mesh(antenaDetalhe1Ponto, antenaDetalheCor);
+				antenaDetalhe1.position.set(0.35, 0.89, -1.0);
+
+				//antena detalhe 2
+
+				var antenaDetalhe2Ponto = new THREE.Geometry();
+				antenaDetalhe2Ponto.vertices.push(new THREE.Vector3(0.007, 0.018, -1.0));
+				antenaDetalhe2Ponto.vertices.push(new THREE.Vector3( 0.007, -0.018, -1.0));
+				antenaDetalhe2Ponto.vertices.push(new THREE.Vector3(-0.007, -0.018, -1.0));
+				antenaDetalhe2Ponto.vertices.push(new THREE.Vector3( -0.007, 0.018, -1.0));
+				antenaDetalhe2Ponto.faces.push(new THREE.Face4(0, 1, 2, 3));
+
+				antenaDetalhe2 = new THREE.Mesh(antenaDetalhe2Ponto, antenaDetalheCor);
+				antenaDetalhe2.position.set(0.35, 0.5, -1.0);
+/*
+				//circulo Barriga 2
+				var circuloBarriga2Cor = new THREE.MeshBasicMaterial({
+					color:0xFFA500,
+					side:THREE.DoubleSide
+				});
+
+				var circuloBarriga2Ponto = new THREE.CircleGeometry(0.8, 100, 0.8, 3.1); //rotação/ tamanho 
+				circuloBarriga2 = new THREE.Mesh(circuloBarriga2Ponto, circuloBarriga2Cor);
+				circuloBarriga2.position.set(1.7, -2.5, -4.0);
+
+
+				//circulo Barriga Dentro 2
+				var circuloBarrigaDentro2Cor = new THREE.MeshBasicMaterial({
+					color:0xFFFFFF,
+					side:THREE.DoubleSide
+				});
+
+				var circuloBarrigaDentro2Ponto = new THREE.CircleGeometry(0.65, 100, 0.8, 3.1); //rotação/ tamanho 
+				circuloBarrigaDentro2 = new THREE.Mesh(circuloBarrigaDentro2Ponto, circuloBarrigaDentro2Cor);
+				circuloBarrigaDentro2.position.set(1.7, -2.5, -4.0);
+
+				//barriga2Detalhe
+				var barriga2DetalhePonto = new THREE.Geometry();
+				
+				barriga2DetalhePonto.vertices.push(new THREE.Vector3( -1.7,  -0.2, -1.0));//d
+				barriga2DetalhePonto.vertices.push(new THREE.Vector3( -1.4, 0.2, -1.0));//e
+				barriga2DetalhePonto.vertices.push(new THREE.Vector3(-1.2, 0.07, -1.0));//d
+				barriga2DetalhePonto.vertices.push(new THREE.Vector3(-1.5, -0.35, -1.0));//e
+				
+				
+				barriga2DetalhePonto.faces.push(new THREE.Face4(0, 1, 2, 3));
+
+				barriga2Detalhe = new THREE.Mesh(barriga2DetalhePonto, detalheRostoCor);
+				barriga2Detalhe.position.set(-0.1, -1.2, -2.0);
+
+				//circulo Barriga 3
+				var circuloBarriga3Cor = new THREE.MeshBasicMaterial({
+					color:0xFFA500,
+					side:THREE.DoubleSide
+				});
+
+				var circuloBarriga3Ponto = new THREE.CircleGeometry(0.9, 100, 2.5, 3.1); //rotação/ tamanho 
+				circuloBarriga3 = new THREE.Mesh(circuloBarriga3Ponto, circuloBarriga3Cor);
+				circuloBarriga3.position.set(0.2, -2.3, -4.0);
+
+*/
+			}
+
+			function rotacao(){//rotação
+				group.rotation.z += 0.1;
+				rendererCena();				
+			}
+
+			function escalarMais(){//escalar aumenta
+				group.position.z += 0.4;
+				rendererCena();
+			}
+
+			function escalarMenos(){//escalar diminui
+				group.position.z -= 0.4;
+				rendererCena();
+			}
+
+			function reflexaoEmy(){//reflexão em relação a y
+				group.scale.x = -1;
+				rendererCena();
+			}
+			function reflexaoEmxEy(){//reflexão em relação a x e y
+				group.scale.x = -1;
+				group.scale.y = -1;
+				rendererCena();
+			}
+
+			function translacaoUp(){//translação pra cima
+				group.position.y += 0.5;
+				rendererCena();
+			}
+
+			function translacaoDown(){//translação pra baixo
+				group.position.y += -0.5;
+				rendererCena();
+			}
+
+			function translacaoLeft(){//translação pra esquerda
+				group.position.x += -0.5;
+				rendererCena();
+			}
+
+			function translacaoRight(){//translação pra direita
+				group.position.x += 0.5;
+				rendererCena();
+			}
+
+			function onWindowResize(){
+
+			  camera.aspect = window.innerWidth / window.innerHeight;
+			  camera.updateProjectionMatrix();
+
+			  renderer.setSize(window.innerWidth, window.innerHeight);
+			}
+
+			function rendererCena(){
+				renderer.render(cena, camera);
+			}
+
+			function init(){
+				//tamanho da Tela
+				var canvasWidth = 1600;
+				var canvasHeight = 476;
+
+				//Renderizar
+				renderer = new THREE.WebGLRenderer({antilias:true, alpha: true}); //antilias serve para tirar o serrilhado da img
+				renderer.setClearColorHex(0xE76924, 1); //(cor, transparência)
+				renderer.setSize(canvasWidth, canvasHeight);
+
+				//PEGANDO A DIV CANVAS 
+				document.getElementById("canvas").appendChild(renderer.domElement); //aplica o objeto de renderização no canvas 
+
+				//objeto da Cena
+				cena = new THREE.Scene();
+
+				//objeto de perspectiva da Camera
+				camera = new THREE.PerspectiveCamera(72, canvasWidth / canvasHeight, 0.1, 1000); //(campo de visão, proporção, plano de recorte próximo, p.r. distante)
+
+				//NO CENTRO DO EIXO Z
+				camera.position.set(0, 0, 0); //(x, y, z)
+				camera.lookAt(cena.position);
+				cena.add(camera);
+
+
+				criarBB8();
+
+				criarGroup();
+			}
+
+
+			function main(){
+				init();
+				rendererCena();
+			}		
+		</script>
+
+</html>
